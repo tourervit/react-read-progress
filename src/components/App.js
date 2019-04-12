@@ -6,7 +6,7 @@ import AddProgressBar from '../ReadProgress';
 
 const colors = {
   startColor: '#F48FB1',
-  endColor: '#FF4081',
+  endColor: '#D81B60',
   startColorComplete: '#EEFF41',
   endColorComplete: '#B2FF59',
 };

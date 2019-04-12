@@ -1,71 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import styled from 'styled-components';
 
-export const withReadProgress = WrappedComponent => {
-  return class extends React.Component {
-    state = {
-      width: 0,
-    };
+const ReadProgress = ({ children }) => {
+  const [width, setWidth] = useState(0);
+  const [toScroll, setToScroll] = useState(null);
+  const kef = 100 / toScroll;
 
-    debounce = (func, wait, immediate) => {
-      let timeout;
-      return function executedFunction() {
-        const context = this;
-        const args = arguments;
-        const later = function() {
-          timeout = null;
-          if (!immediate) func.apply(context, args);
-        };
-        const callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
-      };
-    };
-
-    handleScroll = e => {
-      const scrollablePart =
-        this.component.clientHeight + this.component.offsetTop - window.innerHeight;
-      const kef = 100 / scrollablePart;
-      const width =
-        (window.scrollY +
-          window.innerHeight -
-          (this.component.clientHeight + this.component.offsetTop) +
-          scrollablePart) *
-        kef;
-      this.setState({ width });
-    };
-    componentDidMount() {
-      window.addEventListener('scroll', this.debounce(this.handleScroll, 20));
+  const measuredRef = useCallback(node => {
+    if (node != null) {
+      const nodeCoords = node.getBoundingClientRect();
+      setToScroll(nodeCoords.height - window.innerHeight + node.offsetTop);
     }
-    componentWillUnmount() {
-      window.removeEventListener('scroll', this.handleScroll);
-    }
-    render() {
-      const { color, ...props } = this.props;
-      return (
-        <div
-          ref={outer => {
-            this.component = outer;
-          }}
-        >
-          <div
-            style={{
-              transition: 'all .5s ease',
-              position: 'fixed',
-              top: 0,
-              left: 0,
+  });
 
-              width: `${this.state.width}%`,
-              height: '4px',
-              background:
-                this.state.width === 100
-                  ? 'linear-gradient(to right, white, white)'
-                  : 'linear-gradient(to right, pink, magenta)',
-            }}
-          />
-          <WrappedComponent {...props} />
-        </div>
-      );
-    }
+  const handleScroll = () => {
+    setWidth(Math.min(Math.floor(window.scrollY * kef), 100));
   };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  });
+
+  return (
+    <div ref={measuredRef}>
+      <ProgressBar width={width} />
+      {children}
+    </div>
+  );
 };
+
+export default ReadProgress;
+
+const ProgressBar = styled.div`
+  transition: all 0.3s linear;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: ${props => props.width}%;
+  background: linear-gradient(to right, pink, magenta);
+
+  ::before {
+    display: block;
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    transition: opacity 0.8s;
+    opacity: ${props => (props.width >= 100 ? 1 : 0)};
+    background: linear-gradient(to right, pink, greenyellow);
+  }
+`;

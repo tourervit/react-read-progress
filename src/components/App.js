@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './Header';
 import Content from './Content';
 import Footer from './Footer';
-import RP from '../ReadProgress/RP';
+import RP from '../ReadProgress';
 
 const App = () => (
   <>

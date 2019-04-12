@@ -1,7 +1,16 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 
-const ReadProgress = ({ children }) => {
+const ReadProgress = ({
+  children,
+  colors = {
+    startColor: '#64B5F6',
+    endColor: '#2196F3',
+    startColorComplete: '#4CAF50',
+    endColorComplete: '#00E676',
+  },
+  height = 3,
+}) => {
   const [width, setWidth] = useState(0);
   const [toScroll, setToScroll] = useState(null);
   const kef = 100 / toScroll;
@@ -26,7 +35,7 @@ const ReadProgress = ({ children }) => {
 
   return (
     <div ref={measuredRef}>
-      <ProgressBar width={width} />
+      <ProgressBar width={width} colors={colors} height={height} />
       {children}
     </div>
   );
@@ -35,13 +44,14 @@ const ReadProgress = ({ children }) => {
 export default ReadProgress;
 
 const ProgressBar = styled.div`
-  transition: all 0.3s linear;
   position: fixed;
   top: 0;
   left: 0;
-  height: 2px;
+  height: ${props => props.height}px;
   width: ${props => props.width}%;
-  background: linear-gradient(to right, pink, magenta);
+  background: ${({ colors }) =>
+    `linear-gradient(to right, ${colors.startColor}, ${colors.endColor})`};
+  transition: all 0.3s linear;
 
   ::before {
     display: block;
@@ -49,10 +59,11 @@ const ProgressBar = styled.div`
     position: fixed;
     top: 0;
     left: 0;
-    height: 2px;
+    height: ${props => props.height}px;
     width: 100%;
+    opacity: ${props => (props.width === 100 ? 1 : 0)};
+    background: ${({ colors }) =>
+      `linear-gradient(to right, ${colors.startColorComplete}, ${colors.endColorComplete})`};
     transition: opacity 0.8s;
-    opacity: ${props => (props.width >= 100 ? 1 : 0)};
-    background: linear-gradient(to right, pink, greenyellow);
   }
 `;

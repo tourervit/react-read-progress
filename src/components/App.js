@@ -2,14 +2,23 @@ import React from 'react';
 import Header from './Header';
 import Content from './Content';
 import Footer from './Footer';
-import RP from '../ReadProgress';
+import AddProgressBar from '../ReadProgress';
+
+const colors = {
+  startColor: '#F48FB1',
+  endColor: '#FF4081',
+  startColorComplete: '#EEFF41',
+  endColorComplete: '#B2FF59',
+};
+
+const height = 5;
 
 const App = () => (
   <>
     <Header />
-    <RP>
+    <AddProgressBar colors={colors} height={height}>
       <Content />
-    </RP>
+    </AddProgressBar>
     <Footer />
   </>
 );

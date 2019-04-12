@@ -5,8 +5,8 @@
 Progress bar for your article
 
 <div align="center">
-	<a href="https://react-read-progress-briopxaktv.now.sh">NOW</a>
-	<img src="https://github.com/tourervit/react-read-progress/demo.png">
+	<a href="https://react-read-progress-briopxaktv.now.sh" target="_blank">NOW</a>
+	<img src="https://github.com/tourervit/react-read-progress/blob/master/demo.png">
 </div>
 
 </div>
@@ -14,6 +14,6 @@ Progress bar for your article
 ## Demos
 
 <div align="center">
-	<img src="https://github.com/tourervit/react-read-progress/demo.gif"/>
+	<img src="https://github.com/tourervit/react-read-progress/blob/master/demo.gif"/>
 
 </div>

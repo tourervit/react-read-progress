@@ -13,14 +13,14 @@ const ReadProgress = ({
 }) => {
   const [width, setWidth] = useState(0);
   const [toScroll, setToScroll] = useState(null);
-  const kef = 100 / toScroll;
+  const kef = Math.round((100 / toScroll) * 100) / 100;
 
   const measuredRef = useCallback(node => {
     if (node != null) {
       const nodeCoords = node.getBoundingClientRect();
       setToScroll(nodeCoords.height - window.innerHeight + node.offsetTop);
     }
-  });
+  }, []);
 
   const handleScroll = () => {
     setWidth(Math.min(Math.floor(window.scrollY * kef), 100));
